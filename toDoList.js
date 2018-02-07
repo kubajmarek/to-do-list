@@ -8,109 +8,82 @@ document.addEventListener('DOMContentLoaded', function() {
         addListeners(divPrototype);
         document.querySelector('#to-do-list').appendChild(divPrototype);
         currentLength += 1;
-
-        if (currentLength===1) {
-            document.querySelector('.delete-button').style.display = 'none';
-        } else if (currentLength==2) {
-            document.querySelector('.delete-button').style.display = 'inline';
-        }
     }
 
     function addListeners(thisDiv) {
-        const selectors = doSelectors(thisDiv);
-
-        selectors.saveButton.addEventListener("click", function(event)  {
-            save(event.target.parentElement);
-        });
-
-        selectors.editButton.addEventListener("click", function(event)  {
-            edit(event.target.parentElement);
-        });
-
-        selectors.deleteButton.addEventListener("click", function(event)  {
-            deleteIt(event.target.parentElement);
-        });
-
-        selectors.crossoutButton.addEventListener("click", function(event)  {
-            crossOut(event.target.parentElement);
-        });
-
-        selectors.uncrossoutButton.addEventListener("click", function(event)  {
-            uncrossOut(event.target.parentElement);
-        });
-
-        selectors.moveUpButton.addEventListener("click", function(event)  {
-            moveUp(event.target.parentElement);
-        });
-
-        selectors.moveDownButton.addEventListener("click", function(event)  {
-            moveDown(event.target.parentElement);
-        });
+        thisDiv.querySelectorAll('input').forEach((elegiggle) => {
+            elegiggle.addEventListener('click', (e) => {
+                switch (e.target.dataset.button) {
+                    case "save":
+                        save(e.target.parentElement);
+                        break;
+                    case "edit":
+                        edit(e.target.parentElement);
+                        break;
+                    case "delete":
+                        deleteIt(e.target.parentElement);
+                        break;
+                    case "cross-out":
+                        crossOut(e.target.parentElement);
+                        break;
+                    case "uncross-out":
+                        uncrossOut(e.target.parentElement);
+                        break;
+                    case "move-up":
+                        moveUp(e.target.parentElement);
+                        break;
+                    case "move-down":
+                        moveDown(e.target.parentElement);
+                        break;
+                }
+            })
+        })
     }
 
     function save(thisDiv) {
         const selectors = doSelectors(thisDiv);
+        thisDiv.classList.remove("editing");
+        thisDiv.classList.add("saved");
 
         if (selectors.toDoInput.value.length===0) {
             alert('To Do element cannot be empty.');
             return false;
         }
+
         selectors.toDoText.innerText = selectors.toDoInput.value;
-        selectors.toDoText.style.display = "inline";
-        selectors.toDoInput.style.display = "none";
-        selectors.saveButton.style.display = "none";
-        selectors.editButton.style.display = "inline";
-        selectors.crossoutButton.style.display = 'inline';
+
         if (selectors.index==currentLength) {
             addAnother();
         }
     }
 
     function edit(thisDiv) {
-        const selectors = doSelectors(thisDiv);
-
-        selectors.toDoText.style.display = "none";
-        selectors.toDoInput.style.display = "inline";
-        selectors.saveButton.style.display = "inline";
-        selectors.editButton.style.display = "none";
-        selectors.crossoutButton.style.display = 'none';
-        selectors.uncrossoutButton.style.display = 'none';
+        thisDiv.classList.remove("saved");
+        thisDiv.classList.add("editing");
     }
 
     function deleteIt(thisDiv) {
-        const selectors = doSelectors(thisDiv);
-
         thisDiv.remove();
+        const selectors = doSelectors(thisDiv);
         currentLength -= 1;
+        console.log(selectors.divs);
         selectors.divs.forEach((element, index) => {
             element.querySelector('.index').innerText = index + 1;
         })
-
-        if (currentLength===1) {
-            selectors.divs[0].querySelector('.delete-button').style.display = 'none';
-        }
     }
 
     function crossOut(thisDiv) {
-        const selectors = doSelectors(thisDiv);
-
-        thisDiv.querySelector('.text-wrapper').style.textDecoration = 'line-through';
-        selectors.crossoutButton.style.display = 'none';
-        selectors.uncrossoutButton.style.display = 'inline';
+        thisDiv.classList.add("crossed-out");
     }
 
     function uncrossOut(thisDiv) {
-        const selectors = doSelectors(thisDiv);
-
-        thisDiv.querySelector('.text-wrapper').style.textDecoration = 'none';
-        selectors.crossoutButton.style.display = 'inline';
-        selectors.uncrossoutButton.style.display = 'none';
+        thisDiv.classList.remove("crossed-out");
     }
 
     function moveUp(thisDiv) {
         const selectors = doSelectors(thisDiv);
 
-        swapTest(selectors.divs[selectors.index-2], selectors.divs[selectors.index-1]);
+        swapNodes(selectors.divs[selectors.index-2], selectors.divs[selectors.index-1]);
         selectors.divs[selectors.index-2].querySelector('.index').innerText = selectors.index;
         selectors.divs[selectors.index-1].querySelector('.index').innerText = selectors.index-1;
     }
@@ -118,12 +91,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function moveDown(thisDiv) {
         const selectors = doSelectors(thisDiv);
 
-        swapTest(selectors.divs[selectors.index-1], selectors.divs[selectors.index]);
+        swapNodes(selectors.divs[selectors.index-1], selectors.divs[selectors.index]);
         selectors.divs[selectors.index].querySelector('.index').innerText = selectors.index;
         selectors.divs[selectors.index-1].querySelector('.index').innerText = parseInt(selectors.index)+1;
     }
 
-    function swapTest(node1, node2) {
+    function swapNodes(node1, node2) {
 
         node1.parentNode.replaceChild(node1, node2);
         node1.parentNode.insertBefore(node2, node1);

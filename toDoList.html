@@ -8,19 +8,19 @@
 </head>
 <body>
     <template id="temp">
-        <div class="to-do-element">
+        <div class="to-do-element editing">
             <div class="text-wrapper">
                 <span class="index">1</span>.
-                <span class="to-do-text" style="display: none;"></span>
+                <span class="to-do-text"></span>
                 <input type="text" class="to-do-input" value="here comes text"/>
             </div>
-                <input type="button" class="save-button" value="Click to save"/>
-                <input type="button" class="edit-button" value="Click to edit" style="display: none;"/>
-                <input type="button" class="delete-button" value="Click to delete"/>
-                <input type="button" class="move-up-button" value="Click to prioritize"/>
-                <input type="button" class="move-down-button" value="Click to deprioritize"/>
-                <input type="button" class="cross-out-button" value="Click to crossout" style="display: none;"/>
-                <input type="button" class="uncross-out-button" value="Click to uncrossout" style="display: none;"/>
+                <input type="button" class="save-button" data-button="save" value="Click to save"/>
+                <input type="button" class="edit-button" data-button="edit" value="Click to edit"/>
+                <input type="button" class="delete-button" data-button="delete" value="Click to delete"/>
+                <input type="button" class="move-up-button" data-button="move-up" value="Click to prioritize"/>
+                <input type="button" class="move-down-button" data-button="move-down" value="Click to deprioritize"/>
+                <input type="button" class="cross-out-button" data-button="cross-out" value="Click to crossout"/>
+                <input type="button" class="uncross-out-button" data-button="uncross-out" value="Click to uncrossout"/>
         </div>
     </template>
 

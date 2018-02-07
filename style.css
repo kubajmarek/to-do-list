@@ -2,10 +2,34 @@
     display: inline;
 }
 
+.to-do-element:only-of-type .delete-button {
+    display: none;
+}
+
 .to-do-element:first-of-type .move-up-button {
     display: none;
 }
 
 .to-do-element:last-of-type .move-down-button {
     display: none;
+}
+
+.editing .edit-button, .editing .cross-out-button, .editing .uncross-out-button, .editing .to-do-text, .editing .cross-out-button, .editing .uncross-out-button {
+    display: none;
+}
+
+.saved .save-button, .saved .to-do-input, .saved .uncross-out-button {
+    display: none;
+}
+
+.crossed-out .cross-out-button {
+    display: none;
+}
+
+.crossed-out .uncross-out-button {
+    display: inline;
+}
+
+.crossed-out .text-wrapper {
+    text-decoration: line-through;
 }
