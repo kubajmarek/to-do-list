@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>To Do List</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <script src="toDoList.js"></script>
+</head>
+<body>
+    <template id="temp">
+        <div class="to-do-element">
+            <div class="text-wrapper">
+                <span class="index">1</span>.
+                <span class="to-do-text" style="display: none;"></span>
+                <input type="text" class="to-do-input" value="here comes text"/>
+            </div>
+                <input type="button" class="save-button" value="Click to save"/>
+                <input type="button" class="edit-button" value="Click to edit" style="display: none;"/>
+                <input type="button" class="delete-button" value="Click to delete"/>
+                <input type="button" class="move-up-button" value="Click to prioritize"/>
+                <input type="button" class="move-down-button" value="Click to deprioritize"/>
+                <input type="button" class="cross-out-button" value="Click to crossout" style="display: none;"/>
+                <input type="button" class="uncross-out-button" value="Click to uncrossout" style="display: none;"/>
+        </div>
+    </template>
+
+    <div id="to-do-list">
+    </div>
+</body>
+</html>

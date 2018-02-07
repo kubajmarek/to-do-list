@@ -1,0 +1,11 @@
+.text-wrapper {
+    display: inline;
+}
+
+.to-do-element:first-of-type .move-up-button {
+    display: none;
+}
+
+.to-do-element:last-of-type .move-down-button {
+    display: none;
+}
