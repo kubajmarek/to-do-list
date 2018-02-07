@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function addListeners(thisDiv) {
-        thisDiv.querySelectorAll('input').forEach((elegiggle) => {
+        thisDiv.querySelectorAll('button').forEach((elegiggle) => {
             elegiggle.addEventListener('click', (e) => {
                 switch (e.target.dataset.button) {
                     case "save":

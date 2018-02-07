@@ -14,17 +14,19 @@
                 <span class="to-do-text"></span>
                 <input type="text" class="to-do-input" value="here comes text"/>
             </div>
-                <input type="button" class="save-button" data-button="save" value="Click to save"/>
-                <input type="button" class="edit-button" data-button="edit" value="Click to edit"/>
-                <input type="button" class="delete-button" data-button="delete" value="Click to delete"/>
-                <input type="button" class="move-up-button" data-button="move-up" value="Click to prioritize"/>
-                <input type="button" class="move-down-button" data-button="move-down" value="Click to deprioritize"/>
-                <input type="button" class="cross-out-button" data-button="cross-out" value="Click to crossout"/>
-                <input type="button" class="uncross-out-button" data-button="uncross-out" value="Click to uncrossout"/>
+                <button type="button" class="save-button icon-checkmark" data-button="save"></button>
+                <button type="button" class="edit-button icon-pencil" data-button="edit"></button>
+                <button type="button" class="delete-button icon-cross" data-button="delete"></button>
+                <button type="button" class="move-up-button icon-arrow-up2" data-button="move-up"></span></button>
+                <button type="button" class="move-down-button icon-arrow-down2" data-button="move-down"></button>
+                <button type="button" class="cross-out-button icon-strikethrough" data-button="cross-out"></button>
+                <button type="button" class="uncross-out-button icon-undo" data-button="uncross-out"></button>
         </div>
     </template>
-
-    <div id="to-do-list">
-    </div>
+    <main>
+        <p>To Do List</p>
+        <div id="to-do-list">
+        </div>
+    </main>
 </body>
 </html>
