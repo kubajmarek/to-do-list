@@ -9,11 +9,14 @@
 <body>
     <template id="temp">
         <div class="to-do-element editing">
-            <div class="text-wrapper">
-                <span class="index">1</span>.
-                <span class="to-do-text"></span>
-                <input type="text" class="to-do-input" value="here comes text"/>
+            <div class="index">
+                <span>1</span>.
             </div>
+            <div class="text-wrapper">
+                <span class="to-do-text"></span>
+                <input type="text" class="to-do-input" placeholder="Click to add text."/>
+            </div>
+            <div class="buttons">
                 <button type="button" class="save-button icon-checkmark" data-button="save"></button>
                 <button type="button" class="edit-button icon-pencil" data-button="edit"></button>
                 <button type="button" class="delete-button icon-cross" data-button="delete"></button>
@@ -21,11 +24,13 @@
                 <button type="button" class="move-down-button icon-arrow-down2" data-button="move-down"></button>
                 <button type="button" class="cross-out-button icon-strikethrough" data-button="cross-out"></button>
                 <button type="button" class="uncross-out-button icon-undo" data-button="uncross-out"></button>
+            </div>
         </div>
     </template>
     <main>
         <p>To Do List</p>
         <div id="to-do-list">
+
         </div>
     </main>
 </body>
