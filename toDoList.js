@@ -11,6 +11,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function addListeners(thisDiv) {
+        thisDiv.querySelector('input').addEventListener('keyup', (e) => {
+            if (event.keyCode === 13) {
+                save(e.target.parentElement.parentElement);
+            }
+        });
+
+        thisDiv.querySelector('.text-wrapper').addEventListener('dblclick', (e) => {
+            edit(e.target.parentElement);
+        });
+
         thisDiv.querySelectorAll('button').forEach((elegiggle) => {
             elegiggle.addEventListener('click', (e) => {
                 switch (e.target.dataset.button) {
