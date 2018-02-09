@@ -47,8 +47,28 @@ document.addEventListener('DOMContentLoaded', function() {
                         moveDown(thisDiv);
                         break;
                 }
-            })
-        })
+            });
+        });
+
+        thisDiv.addEventListener('dragover', (e) => {
+           e.preventDefault();
+        });
+
+        thisDiv.addEventListener('dragstart', (e) => {
+            console.log(e.target.querySelector('.index').innerText);
+            e.dataTransfer.setData('text', e.target.querySelector('.index').innerText);;
+        });
+
+        thisDiv.addEventListener('drop', (e) => {
+            let index1 = e.dataTransfer.getData('text');
+            let index2 = e.currentTarget.querySelector('.index').innerText;
+            if (index1 > index2) {
+                document.querySelector('#to-do-list').insertBefore(document.querySelector('.to-do-element:nth-of-type(' + index1 + ')'), e.currentTarget);
+            } else {
+                document.querySelector('#to-do-list').insertBefore(document.querySelector('.to-do-element:nth-of-type(' + index1 + ')'), e.currentTarget.nextSibling);
+            }
+            fixingIndex();
+        });
     }
 
     function save(thisDiv) {
@@ -70,6 +90,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function edit(thisDiv) {
         thisDiv.classList.remove("saved");
         thisDiv.classList.add("editing");
+        thisDiv.querySelector('.to-do-input').addEventListener('blur', () => {
+            save(thisDiv);
+        });
     }
 
     function deleteIt(thisDiv) {
@@ -125,6 +148,12 @@ document.addEventListener('DOMContentLoaded', function() {
             moveUpButton: div.querySelector('.move-up-button'),
             moveDownButton: div.querySelector('.move-down-button')
         }
+    }
+
+    function fixingIndex() {
+        document.querySelectorAll('.to-do-element').forEach((element, index) => {
+            element.querySelector('.index').innerText = (index + 1);
+        });
     }
 
     addAnother();
