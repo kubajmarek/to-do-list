@@ -1,0 +1,39 @@
+.to-do-element:only-of-type .delete-button {
+    display: none !important;
+}
+
+.to-do-element:first-of-type .move-up-button {
+    display: none !important;
+}
+
+.to-do-element:last-of-type .move-down-button {
+    display: none !important;
+}
+
+.editing:hover .save-button, .editing:hover .delete-button, .editing:hover .move-up-button, .editing:hover .move-down-button {
+    display: inline;
+}
+
+.editing .to-do-text {
+    display: none;
+}
+
+.saved:hover .edit-button, .saved:hover .delete-button, .saved:hover .cross-out-button, .saved:hover .move-up-button, .saved:hover .move-down-button {
+    display: inline;
+}
+
+.saved .to-do-input {
+    display: none;
+}
+
+.crossed-out:hover .uncross-out-button {
+    display: inline;
+}
+
+.crossed-out .cross-out-button {
+    display: none !important;
+}
+
+.crossed-out .text-wrapper {
+    text-decoration: line-through;
+}

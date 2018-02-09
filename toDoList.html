@@ -4,6 +4,8 @@
     <meta charset="UTF-8"/>
     <title>To Do List</title>
     <link rel="stylesheet" type="text/css" href="style.css"/>
+    <link rel="stylesheet" type="text/css" href="button-icons.css"/>
+    <link rel="stylesheet" type="text/css" href="switching-mechanism.css"/>
     <script src="toDoList.js"></script>
 </head>
 <body>
@@ -15,10 +17,8 @@
 
     <template id="temp">
         <div class="to-do-element editing">
-            <div class="index">
-                <span>1</span>.
-            </div>
             <div class="text-wrapper">
+                <span><span class="index">1</span>.</span>
                 <span class="to-do-text"></span>
                 <input type="text" class="to-do-input" placeholder="Click to add text."/>
             </div>

@@ -1,69 +1,25 @@
-@font-face {
-    font-family: 'icomoon';
-    src:  url('fonts/icomoon.eot?hbd2yh');
-    src:  url('fonts/icomoon.eot?hbd2yh#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?hbd2yh') format('truetype'),
-    url('fonts/icomoon.woff?hbd2yh') format('woff'),
-    url('fonts/icomoon.svg?hbd2yh#icomoon') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-
-[class^="icon-"], [class*=" icon-"] {
-    /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: 'icomoon' !important;
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-
-    /* Better Font Rendering =========== */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-.icon-pencil:before {
-    content: "\e905";
-}
-.icon-undo:before {
-    content: "\e965";
-}
-.icon-cross:before {
-    content: "\ea0f";
-}
-.icon-checkmark:before {
-    content: "\ea10";
-}
-.icon-arrow-up2:before {
-    content: "\ea3a";
-}
-.icon-arrow-down2:before {
-    content: "\ea3e";
-}
-.icon-strikethrough:before {
-    content: "\ea65";
-}
-
-
 body {
     padding: 0;
     margin: 0;
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+
 }
 
 main {
-    margin-top: 0;
-    margin-left: auto;
-    margin-right: auto;
+    display: block;
 }
 
 #to-do-list {
-    margin-top: 0;
+    margin: 0;
+    padding: 0;
     font-size: 25px;
 }
 
 p {
+    margin-top: 0;
+    padding-top: 0;
     margin-bottom: 0;
     font-size: 40px;
 }
@@ -74,11 +30,6 @@ p {
     margin: 0;
     padding: 0;
     font-size: 25px;
-    vertical-align: text-top;
-}
-
-.index {
-
 }
 
 button {
@@ -89,59 +40,26 @@ button {
 }
 
 .buttons {
-
+    display: inline;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .to-do-element {
     display: grid;
-    width: 500px;
-    grid-template-columns: 50px 450px 200px;
-    grid-template-rows: 100%;
-    border-bottom: 2px grey solid;
+    width: 600px;
+    grid-template-columns: 1fr 200px;
+    margin: 0;
+    padding: 0;
 }
 
 .text-wrapper {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    border-bottom: 2px grey solid;
+}
+
+.to-do-text {
+    min-width: 0;
     word-wrap: break-word;
-
-
-}
-
-.to-do-element:only-of-type .delete-button {
-    display: none !important;
-}
-
-.to-do-element:first-of-type .move-up-button {
-    display: none !important;
-}
-
-.to-do-element:last-of-type .move-down-button {
-    display: none !important;
-}
-
-.editing:hover .save-button, .editing:hover .delete-button, .editing:hover .move-up-button, .editing:hover .move-down-button {
-    display: inline-block;
-}
-
-.editing .to-do-text {
-    display: none;
-}
-
-.saved:hover .edit-button, .saved:hover .delete-button, .saved:hover .cross-out-button, .saved:hover .move-up-button, .saved:hover .move-down-button {
-    display: inline;
-}
-
-.saved .to-do-input {
-    display: none;
-}
-
-.crossed-out .uncross-out-button {
-    display: inline;
-}
-
-.crossed-out .cross-out-button {
-    display: none !important;
-}
-
-.crossed-out .text-wrapper {
-    text-decoration: line-through;
 }
