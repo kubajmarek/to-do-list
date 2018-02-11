@@ -3,4 +3,3 @@
 2. Better way of adding new elements
 3. Even "cleaner" way of looking
 4. Can't change priority of empty elements
-5. Allow copying text, atm it just gets dragged
