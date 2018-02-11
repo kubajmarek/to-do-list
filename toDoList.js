@@ -50,13 +50,13 @@ document.addEventListener('DOMContentLoaded', function() {
             edit(thisDiv);
         });
 
-        thisDiv.querySelector('.save-button').addEventListener('click', save.bind(thisDiv));
-        thisDiv.querySelector('.edit-button').addEventListener('click', edit.bind(thisDiv));
-        thisDiv.querySelector('.delete-button').addEventListener('click', deleteIt.bind(thisDiv));
-        thisDiv.querySelector('.cross-out-button').addEventListener('click', crossOut.bind(thisDiv));
-        thisDiv.querySelector('.uncross-out-button').addEventListener('click', uncrossOut.bind(thisDiv));
-        thisDiv.querySelector('.move-up-button').addEventListener('click', moveUp.bind(thisDiv));
-        thisDiv.querySelector('.move-down-button').addEventListener('click', moveDown.bind(thisDiv));
+        thisDiv.querySelector('.save-button').addEventListener('click', () => save(thisDiv));
+        thisDiv.querySelector('.edit-button').addEventListener('click', () => edit(thisDiv));
+        thisDiv.querySelector('.delete-button').addEventListener('click', () => deleteIt(thisDiv));
+        thisDiv.querySelector('.cross-out-button').addEventListener('click', () =>crossOut(thisDiv));
+        thisDiv.querySelector('.uncross-out-button').addEventListener('click', () => uncrossOut(thisDiv));
+        thisDiv.querySelector('.move-up-button').addEventListener('click', () => moveUp(thisDiv));
+        thisDiv.querySelector('.move-down-button').addEventListener('click', () => moveDown(thisDiv));
 
 
         thisDiv.addEventListener('dragover', (e) => {
@@ -83,7 +83,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function save(thisDiv) {
-        thisDiv = this;
         const selectors = doSelectors(thisDiv);
         if (selectors.toDoInput.value.length===0) {
             alert('To Do element cannot be empty.');
@@ -96,7 +95,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function edit(thisDiv) {
-        thisDiv = this;
         thisDiv.classList.remove("saved");
         thisDiv.classList.add("editing");
         thisDiv.querySelector('.to-do-input').addEventListener('blur', () => {
@@ -105,7 +103,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function deleteIt(thisDiv) {
-        thisDiv = this;
         thisDiv.remove();
         const selectors = doSelectors(thisDiv);
         currentLength -= 1;
@@ -114,18 +111,15 @@ document.addEventListener('DOMContentLoaded', function() {
         })
     }
 
-    function crossOut(thisDiv) {
-        thisDiv = this;
+    function crossOut(thisDiv) { 
         thisDiv.classList.add("crossed-out");
     }
 
     function uncrossOut(thisDiv) {
-        thisDiv = this;
         thisDiv.classList.remove("crossed-out");
     }
 
     function moveUp(thisDiv) {
-        thisDiv = this;
         const selectors = doSelectors(thisDiv);
 
         swapNodes(selectors.divs[selectors.index-2], selectors.divs[selectors.index-1]);
@@ -134,7 +128,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function moveDown(thisDiv) {
-        thisDiv = this;
         const selectors = doSelectors(thisDiv);
 
         swapNodes(selectors.divs[selectors.index-1], selectors.divs[selectors.index]);
