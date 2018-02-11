@@ -29,138 +29,148 @@ document.addEventListener('DOMContentLoaded', function() {
     function addAnother() {
         const divPrototype = document.querySelector("#temp").content.cloneNode(true);
         document.querySelector('#to-do-list').appendChild(divPrototype);
-        currentLength += 1;
-        let addedDiv = document.querySelector('.to-do-element:last-of-type');
-        addedDiv.querySelector('.index').innerText = currentLength;
-        addedDiv.querySelector('.to-do-text').innerText = document.querySelector('.to-do-creator').querySelector('.creator-input').value;
-        addedDiv.querySelector('.to-do-input').value = document.querySelector('.to-do-creator').querySelector('.creator-input').value;
-        addListeners(addedDiv);
-        toDoCreator.querySelector('.creator-input').value = '';
-    }
-
-
-    function addListeners(thisDiv) {``
-        thisDiv.querySelector('input').addEventListener('keyup', (e) => {
-            if (event.keyCode === 13) {
-                save(thisDiv);
-            }
-        });
-
-        thisDiv.querySelector('.text-wrapper').addEventListener('dblclick', (e) => {
-            edit(thisDiv);
-        });
-
-        thisDiv.querySelector('.save-button').addEventListener('click', () => save(thisDiv));
-        thisDiv.querySelector('.edit-button').addEventListener('click', () => edit(thisDiv));
-        thisDiv.querySelector('.delete-button').addEventListener('click', () => deleteIt(thisDiv));
-        thisDiv.querySelector('.cross-out-button').addEventListener('click', () =>crossOut(thisDiv));
-        thisDiv.querySelector('.uncross-out-button').addEventListener('click', () => uncrossOut(thisDiv));
-        thisDiv.querySelector('.move-up-button').addEventListener('click', () => moveUp(thisDiv));
-        thisDiv.querySelector('.move-down-button').addEventListener('click', () => moveDown(thisDiv));
-
-
-        thisDiv.addEventListener('dragover', (e) => {
-           e.preventDefault();
-        });
-
-        thisDiv.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text', e.target.innerText);
-            e.dataTransfer.setDragImage(document.querySelector('.to-do-element:nth-of-type(' + e.target.innerText + ')'), 0, 0);
-        });
-
-        thisDiv.addEventListener('drop', (e) => {
-            console.log('currentTarget test: ');
-            console.log(e.currentTarget);
-            let index1 = e.dataTransfer.getData('text');
-            let index2 = e.currentTarget.querySelector('.index').innerText;
-            if (index1 > index2) {
-                document.querySelector('#to-do-list').insertBefore(document.querySelector('.to-do-element:nth-of-type(' + index1 + ')'), e.currentTarget);
-            } else {
-                document.querySelector('#to-do-list').insertBefore(document.querySelector('.to-do-element:nth-of-type(' + index1 + ')'), e.currentTarget.nextSibling);
-            }
-            fixingIndex();
-        });
-    }
-
-    function save(thisDiv) {
-        const selectors = doSelectors(thisDiv);
-        if (selectors.toDoInput.value.length===0) {
-            alert('To Do element cannot be empty.');
-            return false;
-        }
-
-        thisDiv.classList.remove("editing");
-        thisDiv.classList.add("saved");
-        selectors.toDoText.innerText = selectors.toDoInput.value;
-    }
-
-    function edit(thisDiv) {
-        thisDiv.classList.remove("saved");
-        thisDiv.classList.add("editing");
-        thisDiv.querySelector('.to-do-input').addEventListener('blur', () => {
-            save(thisDiv);
-        });
-    }
-
-    function deleteIt(thisDiv) {
-        thisDiv.remove();
-        const selectors = doSelectors(thisDiv);
-        currentLength -= 1;
-        selectors.divs.forEach((element, index) => {
-            element.querySelector('.index').innerText = index + 1;
-        })
-    }
-
-    function crossOut(thisDiv) { 
-        thisDiv.classList.add("crossed-out");
-    }
-
-    function uncrossOut(thisDiv) {
-        thisDiv.classList.remove("crossed-out");
-    }
-
-    function moveUp(thisDiv) {
-        const selectors = doSelectors(thisDiv);
-
-        swapNodes(selectors.divs[selectors.index-2], selectors.divs[selectors.index-1]);
-        selectors.divs[selectors.index-2].querySelector('.index').innerText = selectors.index;
-        selectors.divs[selectors.index-1].querySelector('.index').innerText = selectors.index-1;
-    }
-
-    function moveDown(thisDiv) {
-        const selectors = doSelectors(thisDiv);
-
-        swapNodes(selectors.divs[selectors.index-1], selectors.divs[selectors.index]);
-        selectors.divs[selectors.index].querySelector('.index').innerText = selectors.index;
-        selectors.divs[selectors.index-1].querySelector('.index').innerText = parseInt(selectors.index)+1;
+        toDos.push(new placeholderName(document.querySelector('.to-do-creator').querySelector('.creator-input').value));
+        console.log(toDos);
+        toDos.slice(-1).pop().addNew();
     }
 
     function swapNodes(node1, node2) {
-
         node1.parentNode.replaceChild(node1, node2);
         node1.parentNode.insertBefore(node2, node1);
     }
 
-    function doSelectors(div) {
-        return {
-            divs: document.querySelectorAll('.to-do-element'),
-            index: div.querySelector('.index').innerText,
-            toDoText: div.querySelector('.to-do-text'),
-            toDoInput: div.querySelector('.to-do-input'),
-            saveButton: div.querySelector('.save-button'),
-            editButton: div.querySelector('.edit-button'),
-            deleteButton: div.querySelector('.delete-button'),
-            crossoutButton: div.querySelector('.cross-out-button'),
-            uncrossoutButton: div.querySelector('.uncross-out-button'),
-            moveUpButton: div.querySelector('.move-up-button'),
-            moveDownButton: div.querySelector('.move-down-button')
-        }
-    }
 
     function fixingIndex() {
-        document.querySelectorAll('.to-do-element').forEach((element, index) => {
-            element.querySelector('.index').innerText = (index + 1);
+        document.querySelectorAll('.to-do-element').forEach((element, ind) => {
+            element.querySelector('.index').innerText = ind + 1;
+            toDos[ind].index = (ind + 1);
         });
+
+        console.log(toDos);
+    }
+
+    let toDos = [];
+
+    function placeholderName(arg) {
+        this.content = arg;
+        this.index = toDos.length + 1;
+        this.element = document.querySelector('.to-do-element:last-of-type');
+        this.addNew();
+        this.addListeners();
+    }
+
+    placeholderName.prototype = {
+        addNew() {
+                this.element.querySelector('.index').innerText = this.index;
+                this.element.querySelector('.to-do-text').innerText = this.content;
+                this.element.querySelector('.to-do-input').value = this.content;
+                toDoCreator.querySelector('.creator-input').value = '';
+
+        },
+        addListeners() {
+            console.log(this);
+            this.element.querySelector('input').addEventListener('keyup', (e) => {
+                if (e.keyCode === 13) {
+                    this.save();
+                }
+            });
+
+            this.element.querySelector('.text-wrapper').addEventListener('dblclick', () => {this.edit()});
+            this.element.querySelector('.save-button').addEventListener('click', () => {this.save()});
+            this.element.querySelector('.edit-button').addEventListener('click', () => {this.edit()});
+            this.element.querySelector('.delete-button').addEventListener('click', () => {this.deleteIt()});
+            this.element.querySelector('.cross-out-button').addEventListener('click', () => {this.crossOut()});
+            this.element.querySelector('.uncross-out-button').addEventListener('click', () => {this.uncrossOut()});
+            this.element.querySelector('.move-up-button').addEventListener('click', () => {this.moveUp()});
+            this.element.querySelector('.move-down-button').addEventListener('click', () => {this.moveDown()});
+
+            this.element.addEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+
+            this.element.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text', this.index);
+                e.dataTransfer.setDragImage(this.element, 0, 0);
+            });
+
+            this.element.addEventListener('drop', (e) => {
+                console.log(toDos);
+                let index1 = e.dataTransfer.getData('text');
+                let index2 = this.index;
+                console.log('this is index2');
+                console.log(index2);
+                console.log(index1 + index2);
+                if (index1 > index2) {
+                    document.querySelector('#to-do-list').insertBefore(document.querySelector('.to-do-element:nth-of-type(' + index1 + ')'), e.currentTarget);
+                    toDos.splice(index2 - 1, -1, toDos[index1 - 1]);
+                    toDos.splice(index1, 1);
+                } else {
+                    document.querySelector('#to-do-list').insertBefore(document.querySelector('.to-do-element:nth-of-type(' + index1 + ')'), e.currentTarget.nextSibling);
+                    let xd = toDos;
+                    console.log(xd);
+                    toDos.splice(index2, -1, toDos[index1 - 1]);
+                    toDos.splice(index1 - 1 , 1);
+                }
+                fixingIndex();
+            });
+        },
+        save() {
+            if (selectors.call(this).toDoInput.value.length===0) {
+                alert('To Do element cannot be empty.');
+                return false;
+            }
+            this.element.classList.remove("editing");
+            this.element.classList.add("saved");
+            this.content = selectors.call(this).toDoInput.value;
+            selectors.call(this).toDoText.innerText = this.content;
+        },
+        edit() {
+            this.element.classList.remove("saved");
+            this.element.classList.add("editing");
+            selectors.call(this).toDoInput.addEventListener('blur', () => {
+                this.save();
+            });
+        },
+        deleteIt() {
+            this.element.remove();
+            toDos.splice(this.index - 1, 1)
+            console.log(toDos);
+            fixingIndex();
+        },
+
+        crossOut() {
+            this.element.classList.add("crossed-out");
+        },
+
+        uncrossOut(thisDiv) {
+            this.element.classList.remove("crossed-out");
+        },
+
+        moveUp() {
+            swapNodes(toDos[this.index-2].element, this.element);
+            fixingIndex();
+        },
+
+        moveDown() {
+            swapNodes(this.element, toDos[this.index].element);
+            fixingIndex();
+            console.log(toDos);
+        },
+    }
+
+    function selectors() {
+        return {
+            index: this.element.querySelector('.index').innerText,
+            toDoText: this.element.querySelector('.to-do-text'),
+            toDoInput: this.element.querySelector('.to-do-input'),
+            saveButton: this.element.querySelector('.save-button'),
+            editButton: this.element.querySelector('.edit-button'),
+            deleteButton: this.element.querySelector('.delete-button'),
+            crossoutButton: this.element.querySelector('.cross-out-button'),
+            uncrossoutButton: this.element.querySelector('.uncross-out-button'),
+            moveUpButton: this.element.querySelector('.move-up-button'),
+            moveDownButton: this.element.querySelector('.move-down-button')
+        }
     }
 });
 
