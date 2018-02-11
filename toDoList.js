@@ -1,17 +1,45 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     let currentLength = 0;
+    let toDoCreator = document.querySelector('.to-do-creator');
+
+
+    toDoCreator.querySelector('input').addEventListener('keyup', (e) => {
+        if (event.keyCode === 13) {
+            if (toDoCreator.querySelector('.creator-input').value.length===0) {
+                alert('Can\'t add empty element');
+                return false;
+            }
+            addAnother();
+        }
+    });
+
+    toDoCreator.querySelector('.add-button').addEventListener('click', (e) => {
+        if (toDoCreator.querySelector('.creator-input').value.length===0) {
+            alert('Can\'t add empty element');
+            return false;
+        }
+        addAnother();
+    });
+
+    toDoCreator.addEventListener('drop', (e) => {
+        e.preventDefault();
+    });
 
     function addAnother() {
         const divPrototype = document.querySelector("#temp").content.cloneNode(true);
-        currentLength += 1;
-        divPrototype.querySelector('.index').innerText = currentLength ;
         document.querySelector('#to-do-list').appendChild(divPrototype);
-        addListeners(document.querySelector('.to-do-element:nth-of-type(' + currentLength + ')'));
+        currentLength += 1;
+        let addedDiv = document.querySelector('.to-do-element:last-of-type');
+        addedDiv.querySelector('.index').innerText = currentLength;
+        addedDiv.querySelector('.to-do-text').innerText = document.querySelector('.to-do-creator').querySelector('.creator-input').value;
+        addedDiv.querySelector('.to-do-input').value = document.querySelector('.to-do-creator').querySelector('.creator-input').value;
+        addListeners(addedDiv);
+        toDoCreator.querySelector('.creator-input').value = '';
     }
 
-    function addListeners(thisDiv) {
-        console.log(thisDiv);
+
+    function addListeners(thisDiv) {``
         thisDiv.querySelector('input').addEventListener('keyup', (e) => {
             if (event.keyCode === 13) {
                 save(thisDiv);
@@ -37,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         thisDiv.addEventListener('dragstart', (e) => {
             e.dataTransfer.setData('text', e.target.innerText);
-            console.log('how query selector looks:');
             e.dataTransfer.setDragImage(document.querySelector('.to-do-element:nth-of-type(' + e.target.innerText + ')'), 0, 0);
         });
 
@@ -66,9 +93,6 @@ document.addEventListener('DOMContentLoaded', function() {
         thisDiv.classList.remove("editing");
         thisDiv.classList.add("saved");
         selectors.toDoText.innerText = selectors.toDoInput.value;
-        if (parseInt(selectors.index) === currentLength) {
-            addAnother();
-        }
     }
 
     function edit(thisDiv) {
@@ -145,7 +169,5 @@ document.addEventListener('DOMContentLoaded', function() {
             element.querySelector('.index').innerText = (index + 1);
         });
     }
-
-    addAnother();
 });
 

@@ -66,3 +66,11 @@ button {
 .index-wrapper {
     cursor: move;
 }
+
+.to-do-creator .to-do-input {
+    display: inline;
+}
+
+.to-do-creator:hover .add-button {
+    display: inline;
+}

@@ -11,12 +11,17 @@
 <body>
     <main>
         <p>To Do List</p>
+        <div class="to-do-creator">
+            <input type="text" class="creator-input" placeholder="Click to add text."/>
+            <button type="button" class="add-button icon-checkmark"></button>
+        </div>
         <div id="to-do-list">
+
         </div>
     </main>
 
     <template id="temp">
-        <div class="to-do-element editing">
+        <div class="to-do-element saved">
             <div class="text-wrapper">
                 <span class="index-wrapper"><span class="index" draggable="true">1</span>.</span>
                 <span class="to-do-text"></span>
