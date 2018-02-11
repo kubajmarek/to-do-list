@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    let currentLength = 0;
+    let allToDoElements = [];
+    
+    
     let toDoCreator = document.querySelector('.to-do-creator');
 
 
@@ -29,9 +31,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function addAnother() {
         const divPrototype = document.querySelector("#temp").content.cloneNode(true);
         document.querySelector('#to-do-list').appendChild(divPrototype);
-        toDos.push(new placeholderName(document.querySelector('.to-do-creator').querySelector('.creator-input').value));
-        console.log(toDos);
-        toDos.slice(-1).pop().addNew();
+        allToDoElements.push(new toDoElement(document.querySelector('.to-do-creator').querySelector('.creator-input').value));
+        console.log(allToDoElements);
+        allToDoElements.slice(-1).pop().addNew();
     }
 
     function swapNodes(node1, node2) {
@@ -39,33 +41,27 @@ document.addEventListener('DOMContentLoaded', function() {
         node1.parentNode.insertBefore(node2, node1);
     }
 
-
     function fixingIndex() {
         document.querySelectorAll('.to-do-element').forEach((element, ind) => {
             element.querySelector('.index').innerText = ind + 1;
-            toDos[ind].index = (ind + 1);
+            allToDoElements[ind].index = (ind + 1);
         });
-
-        console.log(toDos);
     }
 
-    let toDos = [];
-
-    function placeholderName(arg) {
+    function toDoElement(arg) {
         this.content = arg;
-        this.index = toDos.length + 1;
+        this.index = allToDoElements.length + 1;
         this.element = document.querySelector('.to-do-element:last-of-type');
         this.addNew();
         this.addListeners();
     }
 
-    placeholderName.prototype = {
+    toDoElement.prototype = {
         addNew() {
                 this.element.querySelector('.index').innerText = this.index;
                 this.element.querySelector('.to-do-text').innerText = this.content;
                 this.element.querySelector('.to-do-input').value = this.content;
                 toDoCreator.querySelector('.creator-input').value = '';
-
         },
         addListeners() {
             console.log(this);
@@ -94,22 +90,16 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             this.element.addEventListener('drop', (e) => {
-                console.log(toDos);
                 let index1 = e.dataTransfer.getData('text');
                 let index2 = this.index;
-                console.log('this is index2');
-                console.log(index2);
-                console.log(index1 + index2);
                 if (index1 > index2) {
-                    document.querySelector('#to-do-list').insertBefore(document.querySelector('.to-do-element:nth-of-type(' + index1 + ')'), e.currentTarget);
-                    toDos.splice(index2 - 1, -1, toDos[index1 - 1]);
-                    toDos.splice(index1, 1);
+                    document.querySelector('#to-do-list').insertBefore(allToDoElements[index1 - 1].element, this.element);
+                    allToDoElements.splice(index2 - 1, -1, allToDoElements[index1 - 1]);
+                    allToDoElements.splice(index1, 1);
                 } else {
-                    document.querySelector('#to-do-list').insertBefore(document.querySelector('.to-do-element:nth-of-type(' + index1 + ')'), e.currentTarget.nextSibling);
-                    let xd = toDos;
-                    console.log(xd);
-                    toDos.splice(index2, -1, toDos[index1 - 1]);
-                    toDos.splice(index1 - 1 , 1);
+                    document.querySelector('#to-do-list').insertBefore(allToDoElements[index1 - 1].element, this.element.nextSibling);
+                    allToDoElements.splice(index2, -1, allToDoElements[index1 - 1]);
+                    allToDoElements.splice(index1 - 1 , 1);
                 }
                 fixingIndex();
             });
@@ -133,28 +123,27 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         deleteIt() {
             this.element.remove();
-            toDos.splice(this.index - 1, 1)
-            console.log(toDos);
+            allToDoElements.splice(this.index - 1, 1)
+            console.log(allToDoElements);
             fixingIndex();
         },
-
         crossOut() {
             this.element.classList.add("crossed-out");
         },
-
-        uncrossOut(thisDiv) {
+        uncrossOut() {
             this.element.classList.remove("crossed-out");
         },
-
         moveUp() {
-            swapNodes(toDos[this.index-2].element, this.element);
+            swapNodes(allToDoElements[this.index-2].element, this.element);
+            allToDoElements.splice(this.index-2, 0, this);
+            allToDoElements.splice(this.index);
             fixingIndex();
         },
-
         moveDown() {
-            swapNodes(this.element, toDos[this.index].element);
+            swapNodes(this.element, allToDoElements[this.index].element);
+            allToDoElements.splice(this.index-1, 0, allToDoElements[this.index]);
+            allToDoElements.splice(this.index+1, 1);
             fixingIndex();
-            console.log(toDos);
         },
     }
 
