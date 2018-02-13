@@ -5,9 +5,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function retrievingList() {
         if (localStorage.length !== 0) {
             if (confirm('Do you want to retrieve previous To Do List?')) {
-                localStorage.previousList.split(',').forEach((element) => {
-                    addAnother(element);
-                });
+                try {
+                    console.log(JSON.parse(localStorage.previousList));
+                    JSON.parse(localStorage.previousList).forEach((element) => {
+                        allToDoElements.push(new toDoElement(element.content))
+                    })
+                }
+                catch(error) {
+                    console.log(error);
+                }
             } else {
                 localStorage.removeItem('previousList');
             }
@@ -23,7 +29,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert('Can\'t add empty element');
                     return false;
                 }
-                addAnother(toDoCreator.querySelector('.creator-input').value);
+                allToDoElements.push(new toDoElement(toDoCreator.querySelector('.creator-input').value));
+                toDoElement.saveList();
                 toDoCreator.querySelector('.creator-input').value = '';
             }
         });
@@ -33,40 +40,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Can\'t add empty element');
                 return false;
             }
-            addAnother(toDoCreator.querySelector('.creator-input').value);
+            allToDoElements.push(new toDoElement(toDoCreator.querySelector('.creator-input').value));4
+            toDoElement.saveList();
             toDoCreator.querySelector('.creator-input').value = '';
         });
 
-        toDoCreator.addEventListener('drop', (e) => {
+        toDoCreator.addEventListener('dragover', (e) => {
             e.preventDefault();
-        });
-    }
-
-    function saveList() {
-        let arrayOfContents = [];
-        allToDoElements.forEach((element) => {
-           arrayOfContents.push(element.content);
-        });
-        localStorage.setItem('previousList', arrayOfContents);
-    }
-
-    function addAnother(arg) {
-        const divPrototype = document.querySelector("#temp").content.cloneNode(true);
-        document.querySelector('#to-do-list').appendChild(divPrototype);
-        allToDoElements.push(new toDoElement(arg));
-        allToDoElements.slice(-1).pop().addNew();
-        saveList();
-    }
-
-    function swapNodes(node1, node2) {
-        node1.parentNode.replaceChild(node1, node2);
-        node1.parentNode.insertBefore(node2, node1);
-    }
-
-    function fixingIndex() {
-        document.querySelectorAll('.to-do-element').forEach((element, ind) => {
-            element.querySelector('.index').innerText = ind + 1;
-            allToDoElements[ind].index = (ind + 1);
         });
     }
 
@@ -74,15 +54,19 @@ document.addEventListener('DOMContentLoaded', function() {
         constructor(arg) {
             this.content = arg;
             this.index = allToDoElements.length + 1;
-            this.element = document.querySelector('.to-do-element:last-of-type');
+            this.element = null;
+            console.log(this);
             this.addNew();
             this.addListeners();
         }
 
         addNew() {
-                this.element.querySelector('.index').innerText = this.index;
-                this.element.querySelector('.to-do-text').innerText = this.content;
-                this.element.querySelector('.to-do-input').value = this.content;
+            const divPrototype = document.querySelector("#temp").content.cloneNode(true);
+            document.querySelector('#to-do-list').appendChild(divPrototype);
+            this.element = document.querySelector('.to-do-element:last-of-type');
+            this.element.querySelector('.index').innerText = this.index;
+            this.element.querySelector('.to-do-text').innerText = this.content;
+            this.element.querySelector('.to-do-input').value = this.content;
         }
 
         addListeners() {
@@ -145,8 +129,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     allToDoElements.splice(index2, -1, allToDoElements[index1 - 1]);
                     allToDoElements.splice(index1 - 1 , 1);
                 }
-                fixingIndex();
-                saveList();
+                toDoElement.fixingIndex();
+                toDoElement.saveList();
             });
         }
 
@@ -159,12 +143,17 @@ document.addEventListener('DOMContentLoaded', function() {
             this.element.classList.add("saved");
             this.content = this.selectors().toDoInput.value;
             this.selectors().toDoText.innerText = this.content;
-            saveList();
+            toDoElement.saveList();
+            document.querySelector('.to-do-creator').querySelector('.creator-input').focus();
         }
 
         edit() {
+            allToDoElements.forEach((element) => {
+                element.save();
+            });
             this.element.classList.remove("saved");
             this.element.classList.add("editing");
+            this.selectors().toDoInput.focus();
             this.selectors().toDoInput.addEventListener('blur', () => {
                 this.save();
             });
@@ -173,8 +162,8 @@ document.addEventListener('DOMContentLoaded', function() {
         delete() {
             this.element.remove();
             allToDoElements.splice(this.index - 1, 1);
-            fixingIndex();
-            saveList();
+            toDoElement.fixingIndex();
+            toDoElement.saveList();
         }
 
         crossOut() {
@@ -186,19 +175,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         moveUp() {
-            swapNodes(allToDoElements[this.index-2].element, this.element);
+            toDoElement.swapNodes(allToDoElements[this.index-2].element, this.element);
             allToDoElements.splice(this.index-2, 0, this);
             allToDoElements.splice(this.index, 1);
-            fixingIndex();
-            saveList();
+            toDoElement.fixingIndex();
+            toDoElement.saveList();
         }
 
         moveDown() {
-            swapNodes(this.element, allToDoElements[this.index].element);
+            toDoElement.swapNodes(this.element, allToDoElements[this.index].element);
             allToDoElements.splice(this.index-1, 0, allToDoElements[this.index]);
             allToDoElements.splice(this.index+1, 1);
-            fixingIndex();
-            saveList();
+            toDoElement.fixingIndex();
+            toDoElement.saveList();
         }
 
         selectors() {
@@ -213,6 +202,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 uncrossoutButton: this.element.querySelector('.uncross-out-button'),
                 moveUpButton: this.element.querySelector('.move-up-button'),
                 moveDownButton: this.element.querySelector('.move-down-button')
+            }
+        }
+
+        static swapNodes(node1, node2) {
+            node1.parentNode.replaceChild(node1, node2);
+            node1.parentNode.insertBefore(node2, node1);
+        }
+
+        static fixingIndex() {
+            document.querySelectorAll('.to-do-element').forEach((element, ind) => {
+                element.querySelector('.index').innerText = ind + 1;
+                allToDoElements[ind].index = (ind + 1);
+            });
+        }
+
+        static saveList() {
+            try {
+                localStorage.setItem('previousList', JSON.stringify(allToDoElements));
+            }
+            catch(error) {
+                console.log(error);
             }
         }
     }
