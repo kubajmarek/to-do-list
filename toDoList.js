@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (localStorage.length !== 0) {
             if (confirm('Do you want to retrieve previous To Do List?')) {
                 try {
-                    console.log(JSON.parse(localStorage.previousList));
                     JSON.parse(localStorage.previousList).forEach((element) => {
                         allToDoElements.push(new toDoElement(element.content))
                     })
@@ -55,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function() {
             this.content = arg;
             this.index = allToDoElements.length + 1;
             this.element = null;
-            console.log(this);
             this.addNew();
             this.addListeners();
         }
