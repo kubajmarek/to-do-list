@@ -82,3 +82,7 @@ button {
 .to-do-creator:hover .add-button {
     display: inline;
 }
+
+input {
+    outline: none;
+}
