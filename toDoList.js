@@ -116,6 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             this.element.addEventListener('drop', (e) => {
+                e.preventDefault();
                 let index1 = e.dataTransfer.getData('text');
                 let index2 = this.index;
                 if (index1 > index2) {
